@@ -18,6 +18,13 @@ app.use(cors({
 }),
 )
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "ResumeAI backend is running",
+  });
+});
+
 import authRouter from "./routes/auth.routes.js"
 app.use("/api/v1/users",authRouter)
 
