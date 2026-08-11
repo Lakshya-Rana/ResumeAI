@@ -5,7 +5,6 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 import { PDFParse } from "pdf-parse";
-import openai from "../utils/openAi.js";
 import { analyzeWithAI } from "../utils/ai.js";
 
 export const uploadResume = asyncHandler(async (req, res) => {
