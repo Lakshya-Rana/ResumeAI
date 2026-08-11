@@ -62,7 +62,7 @@ function Register() {
             to="/"
             className="text-2xl font-bold tracking-tight flex items-center justify-center gap-2 pt-4"
           >
-            <img src="/src/assets/job-search.png" alt="logo" className="w-10 h-full" />
+            <img src="/job-search.png" alt="logo" className="w-10 h-full" />
             <span>ResumeAI</span>
           </Link>
 

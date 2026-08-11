@@ -13,7 +13,7 @@ function Navbar() {
           to="/"
           className="flex justify-center items-center gap-2 text-xl font-bold tracking-tight "
         >
-            <img src="/src/assets/job-search.png" alt="logo" className="w-10 h-full" />
+            <img src="/job-search.png" alt="logo" className="w-10 h-full" />
             <span>ResumeAI</span>
         </Link>
 
