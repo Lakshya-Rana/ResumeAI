@@ -2,24 +2,10 @@ import { Ollama } from "ollama";
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const ollama = new Ollama(
-    isProduction
-        ? {
-              host: process.env.OLLAMA_HOST,
-              headers: {
-                  Authorization: `Bearer ${process.env.OLLAMA_API_KEY}`
-              }
-          }
-        : {
-              host: "http://127.0.0.1:11434"
-          }
-);
+const ollama = new Ollama();
 
 const response = await ollama.chat({
-    model: isProduction
-        ? "gpt-oss:120b-cloud"
-        : "llama3.2:3b",
-
+    model: "gpt-oss:120b-cloud",
     messages: [
         {
             role: "system",
@@ -87,7 +73,6 @@ NOTHING CAN BE EMPTY AND IT IS A MUST.
             content: `Analyze this resume:\n\n${resumeText}`
         }
     ],
-
     stream: false,
     format: "json"
 });
