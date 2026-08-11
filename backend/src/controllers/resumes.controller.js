@@ -20,8 +20,19 @@ export const uploadResume = asyncHandler(async (req, res) => {
         throw new apiError(400, "Resume file is required.");
     }
 
+    // Upload the PDF to Cloudinary first
+    const uploadedFile = await uploadOnCloudinary(fileLocalPath);
+
+    if (!uploadedFile) {
+        throw new apiError(
+            400,
+            "Failed to upload resume on Cloudinary."
+        );
+    }
+
+    // Extract text from the Cloudinary URL
     const parser = new PDFParse({
-        url: fileLocalPath
+        url: uploadedFile.secure_url
     });
 
     let extractedText;
@@ -39,15 +50,6 @@ export const uploadResume = asyncHandler(async (req, res) => {
         extractedText = result.text;
     } finally {
         await parser.destroy();
-    }
-
-    const uploadedFile = await uploadOnCloudinary(fileLocalPath);
-
-    if (!uploadedFile) {
-        throw new apiError(
-            400,
-            "Failed to upload resume on Cloudinary."
-        );
     }
 
     const resume = await Resume.create({
