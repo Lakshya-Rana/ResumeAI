@@ -8,74 +8,74 @@ import { PDFParse } from "pdf-parse";
 import { analyzeWithAI } from "../utils/ai.js";
 
 export const uploadResume = asyncHandler(async (req, res) => {
-    const { title } = req.body;
+const { title } = req.body;
 
-    if (!req.file) {
-        throw new apiError(400, "Resume file required.");
-    }
+if (!req.file) {
+    throw new apiError(400, "Resume file required.");
+}
 
-    const fileLocalPath = req.file.path;
+const fileLocalPath = req.file.path;
 
-    if (!fileLocalPath) {
-        throw new apiError(400, "Resume file is required.");
-    }
+if (!fileLocalPath) {
+    throw new apiError(400, "Resume file is required.");
+}
 
-    // Upload the PDF to Cloudinary first
-    const uploadedFile = await uploadOnCloudinary(fileLocalPath);
+const parser = new PDFParse({
+    url: fileLocalPath
+});
 
-    if (!uploadedFile) {
+let extractedText;
+
+try {
+    const result = await parser.getText();
+
+    if (!result.text || !result.text.trim()) {
         throw new apiError(
             400,
-            "Failed to upload resume on Cloudinary."
+            "Could not extract text from this resume."
         );
     }
 
-    // Extract text from the Cloudinary URL
-    const parser = new PDFParse({
-        url: uploadedFile.secure_url
-    });
+    extractedText = result.text;
+} finally {
+    await parser.destroy();
+}
 
-    let extractedText;
+const uploadedFile = await uploadOnCloudinary(fileLocalPath);
 
-    try {
-        const result = await parser.getText();
+if (!uploadedFile) {
+    throw new apiError(
+        400,
+        "Failed to upload resume on Cloudinary."
+    );
+}
 
-        if (!result.text || !result.text.trim()) {
-            throw new apiError(
-                400,
-                "Could not extract text from this resume."
-            );
-        }
+const resume = await Resume.create({
+    owner: req.user._id,
+    title,
+    resumeUrl: uploadedFile.secure_url,
+    publicId: uploadedFile.public_id,
+    extractedText
+});
 
-        extractedText = result.text;
-    } finally {
-        await parser.destroy();
-    }
+if (!resume) {
+    throw new apiError(
+        500,
+        "Something went wrong while creating resume."
+    );
+}
 
-    const resume = await Resume.create({
-        owner: req.user._id,
-        title,
-        resumeUrl: uploadedFile.secure_url,
-        publicId: uploadedFile.public_id,
-        extractedText
-    });
+return res
+    .status(201)
+    .json(
+        new apiResponse(
+            201,
+            resume,
+            "Resume uploaded successfully."
+        )
+    );
 
-    if (!resume) {
-        throw new apiError(
-            500,
-            "Something went wrong while creating resume."
-        );
-    }
 
-    return res
-        .status(201)
-        .json(
-            new apiResponse(
-                201,
-                resume,
-                "Resume uploaded successfully."
-            )
-        );
 });
 
 export const getMyResumes = asyncHandler(async(req,res)=>{
