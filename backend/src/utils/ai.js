@@ -63,6 +63,7 @@ Rules:
 13. Suggestions must be specific and actionable.
 14. Nothing can be empty.
 15. Return ONLY valid JSON.
+Give a goood response and name shouldnot be mentioned in the response .
 `
                 },
                 {
