@@ -107,7 +107,7 @@ export const loginUser = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "none"
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     };
 
     return res
@@ -157,7 +157,7 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
         const options = {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "none"
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
         };
 
         return res
@@ -199,7 +199,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "none"
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     };
 
     return res
