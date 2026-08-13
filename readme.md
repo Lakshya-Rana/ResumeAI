@@ -13,7 +13,6 @@ Users can upload a PDF resume, extract its content, analyze it using AI, and vie
 * User registration and login
 * JWT-based authentication
 * Access and refresh token handling
-* Email verification
 * Forgot and reset password
 * Protected frontend routes
 * Protected backend routes
