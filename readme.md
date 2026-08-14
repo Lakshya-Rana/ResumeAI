@@ -412,10 +412,8 @@ The project may not currently include production-level protections such as:
 
 ## 🌐 Live Demo
 
-Add your deployed application here once available:
-
 ```text
-https://your-live-demo-url.com
+resume-ai-indol-nine.vercel.app
 ```
 
 ---
